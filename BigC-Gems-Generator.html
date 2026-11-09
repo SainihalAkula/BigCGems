@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f6f2" />
+  <meta name="description" content="Create polished BigC Gems natural gemstone product descriptions in seconds." />
+  <title>BigC Gems — Description Studio</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202c2a;
+      --muted: #6c7771;
+      --soft-muted: #89928c;
+      --paper: #f7f6f2;
+      --card: #fffefa;
+      --line: #e8e7df;
+      --green: #245c4b;
+      --green-dark: #194638;
+      --green-pale: #eaf1ec;
+      --gold: #b58a4d;
+      --shadow: 0 18px 55px rgba(39, 52, 44, .07);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(211, 222, 211, .35), transparent 28rem),
+        var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .page-shell { width: min(1200px, calc(100% - 48px)); margin: 0 auto; }
+    .topbar {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(54, 75, 63, .10);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+    .brand-mark {
+      width: 38px; height: 38px; display: grid; place-items: center;
+      border: 1px solid rgba(181, 138, 77, .45); border-radius: 12px;
+      background: #fffdf8; color: var(--green);
+    }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .brand-name { font-family: Georgia, "Times New Roman", serif; font-size: 22px; letter-spacing: -.5px; }
+    .brand-name span { color: var(--gold); }
+    .topbar-note { color: var(--muted); font-size: 12px; letter-spacing: .11em; text-transform: uppercase; }
+
+    .intro { padding: 48px 0 30px; text-align: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      color: var(--green); font-size: 11px; font-weight: 750;
+      letter-spacing: .16em; text-transform: uppercase;
+    }
+    .eyebrow::before, .eyebrow::after { content: ""; width: 23px; height: 1px; background: var(--gold); }
+    h1 {
+      margin: 13px 0 10px; font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 5vw, 51px); line-height: 1.08; letter-spacing: -1.35px; font-weight: 500;
+    }
+    .intro p { margin: 0 auto; max-width: 570px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+
+    .workspace { display: grid; grid-template-columns: minmax(0, .96fr) minmax(0, 1.04fr); gap: 22px; align-items: start; padding: 10px 0 58px; }
+    .panel {
+      min-width: 0; background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+    }
+    .panel-head { padding: 23px 25px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 14px; align-items: center; }
+    .panel-heading { display: flex; align-items: center; gap: 11px; }
+    .step {
+      flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%;
+      display: grid; place-items: center; color: var(--green); background: var(--green-pale);
+      font-family: Georgia, serif; font-size: 15px;
+    }
+    h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-weight: 500; font-size: 21px; letter-spacing: -.25px; }
+    .panel-subtitle { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .text-button { border: 0; padding: 7px 0 7px 8px; background: transparent; color: var(--green); font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .text-button:hover { color: var(--green-dark); text-decoration: underline; }
+    .form-body { padding: 22px 25px 25px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 17px 14px; }
+    .field { min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    label { display: block; margin-bottom: 7px; color: #47534d; font-size: 11px; font-weight: 750; letter-spacing: .075em; text-transform: uppercase; }
+    .required { color: #b7794e; }
+    input, select {
+      width: 100%; height: 46px; border: 1px solid #dedfd7; border-radius: 10px;
+      background: #fff; padding: 0 13px; color: var(--ink); outline: none;
+      font-size: 14px; transition: border-color .18s, box-shadow .18s, background .18s;
+    }
+    input::placeholder { color: #a4aaa4; }
+    input:focus, select:focus { border-color: #6e9a83; box-shadow: 0 0 0 3px rgba(69, 126, 94, .12); background: #fffefa; }
+    .hint { margin: 6px 0 0; color: var(--soft-muted); font-size: 11px; line-height: 1.45; }
+    .form-footnote { margin: 19px 0 0; display: flex; align-items: flex-start; gap: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .form-footnote svg { flex: 0 0 15px; margin-top: 1px; color: var(--gold); }
+
+    .preview-panel { position: sticky; top: 18px; }
+    .preview-head { padding-bottom: 17px; }
+    .live-indicator { display: inline-flex; align-items: center; gap: 6px; color: var(--green); font-size: 10px; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #5c9975; box-shadow: 0 0 0 3px #e8f1e9; }
+    .preview-body { padding: 22px 25px 0; }
+    .document-label { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 12px; color: var(--soft-muted); font-size: 10px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .demo-tag { color: #8b6736; background: #f7f0e4; padding: 4px 7px; border-radius: 5px; letter-spacing: .06em; }
+    .output-wrap {
+      min-height: 420px; max-height: 570px; overflow: auto;
+      padding: 21px 19px; border: 1px solid #e9e7df; border-radius: 13px;
+      background: linear-gradient(180deg, #fffefa, #fff);
+    }
+    #descriptionOutput { margin: 0; color: #36413b; white-space: pre-wrap; overflow-wrap: anywhere; font-family: ui-serif, Georgia, serif; font-size: 13px; line-height: 1.78; }
+    .empty-state { min-height: 376px; padding: 42px 10px 20px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; color: var(--muted); }
+    .empty-gem { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 18px; background: var(--green-pale); color: var(--green); margin-bottom: 16px; }
+    .empty-gem svg { width: 30px; height: 30px; }
+    .empty-state strong { color: var(--ink); font-family: Georgia, serif; font-size: 18px; font-weight: 500; }
+    .empty-state span { max-width: 230px; margin-top: 7px; font-size: 12px; line-height: 1.6; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 17px 25px 22px; }
+    .action-button {
+      min-height: 47px; display: inline-flex; justify-content: center; align-items: center; gap: 9px;
+      padding: 0 14px; border-radius: 10px; border: 1px solid var(--green); cursor: pointer;
+      font-size: 13px; font-weight: 750; transition: transform .16s, background .16s, box-shadow .16s;
+    }
+    .action-button:active { transform: translateY(1px); }
+    .action-button.primary { color: #fff; background: var(--green); box-shadow: 0 5px 13px rgba(36, 92, 75, .16); }
+    .action-button.primary:hover:not(:disabled) { background: var(--green-dark); box-shadow: 0 7px 16px rgba(36, 92, 75, .22); }
+    .action-button.secondary { color: var(--green); background: #fff; }
+    .action-button.secondary:hover:not(:disabled) { background: var(--green-pale); }
+    .action-button:disabled { opacity: .42; cursor: not-allowed; box-shadow: none; }
+    .action-button svg { width: 16px; height: 16px; }
+    .status { min-height: 19px; padding: 0 25px 15px; color: var(--green); font-size: 11px; text-align: center; }
+    .status.error { color: #a34b3c; }
+    .bottom-note { padding: 0 0 34px; color: var(--soft-muted); font-size: 11px; text-align: center; line-height: 1.6; }
+    .bottom-note span { color: var(--gold); }
+
+    @media (max-width: 850px) {
+      .workspace { grid-template-columns: 1fr; max-width: 650px; margin: 0 auto; }
+      .preview-panel { position: static; }
+      .intro { padding-top: 38px; }
+    }
+    @media (max-width: 560px) {
+      .page-shell { width: min(100% - 28px, 480px); }
+      .topbar { height: 68px; }
+      .brand-name { font-size: 20px; }
+      .topbar-note { font-size: 9px; letter-spacing: .08em; }
+      .intro { padding: 34px 0 22px; }
+      .intro p { font-size: 13px; }
+      .workspace { gap: 15px; padding-top: 7px; padding-bottom: 35px; }
+      .panel { border-radius: 17px; }
+      .panel-head { padding: 19px 17px 15px; }
+      .form-body { padding: 19px 17px 21px; }
+      .form-grid { gap: 15px 10px; }
+      .field.full-mobile { grid-column: 1 / -1; }
+      input, select { height: 45px; padding: 0 10px; font-size: 13px; }
+      .preview-body { padding: 18px 16px 0; }
+      .output-wrap { min-height: 330px; max-height: 480px; padding: 16px 14px; }
+      .empty-state { min-height: 295px; padding-top: 30px; }
+      #descriptionOutput { font-size: 12px; }
+      .actions { padding: 14px 16px 17px; gap: 8px; }
+      .action-button { min-height: 46px; padding: 0 8px; font-size: 12px; }
+      .status { padding-left: 16px; padding-right: 16px; }
+      .document-label { font-size: 9px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="BigC Gems home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M8 5.5h16l5 8.1L16 28 3 13.6l5-8.1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m3.5 13.5 25-.1M8 5.8l4 7.5L16 28l4-14.7 4-7.5M12 13.3l4-7.5 4 7.5" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="brand-name">BigC <span>Gems</span></span>
+      </a>
+      <div class="topbar-note">Product Description Studio</div>
+    </header>
+
+    <main id="top">
+      <section class="intro">
+        <div class="eyebrow">A little brilliance, beautifully told</div>
+        <h1>Every gemstone has a story.</h1>
+        <p>Enter your gemstone's details and create a polished, ready-to-share product description in moments.</p>
+      </section>
+
+      <section class="workspace" aria-label="Gemstone description generator">
+        <section class="panel" aria-labelledby="formTitle">
+          <div class="panel-head">
+            <div class="panel-heading">
+              <span class="step">01</span>
+              <div>
+                <h2 id="formTitle">Gemstone details</h2>
+                <p class="panel-subtitle">Tell us what makes this stone special.</p>
+              </div>
+            </div>
+            <button type="button" class="text-button" id="exampleButton">Load example ↗</button>
+          </div>
+          <div class="form-body">
+            <form id="gemstoneForm" autocomplete="on">
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="gemstone">Gemstone name <span class="required">*</span></label>
+                  <input id="gemstone" name="gemstone" placeholder="e.g. Blue Sapphire" required maxlength="70" />
+                </div>
+                <div class="field">
+                  <label for="origin">Origin <span class="required">*</span></label>
+                  <input id="origin" name="origin" placeholder="e.g. Sri Lanka" required maxlength="60" />
+                </div>
+                <div class="field">
+                  <label for="carat">Carat weight <span class="required">*</span></label>
+                  <input id="carat" name="carat" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="e.g. 2.50" required />
+                </div>
+                <div class="field">
+                  <label for="shape">Shape <span class="required">*</span></label>
+                  <input id="shape" name="shape" placeholder="e.g. Oval, Round, Cushion" required maxlength="50" />
+                </div>
+                <div class="field">
+                  <label for="dimensions">Dimensions <span class="required">*</span></label>
+                  <input id="dimensions" name="dimensions" type="text" inputmode="text" placeholder="e.g. 8.2 * 6.1 or 8.2 x 6.1" required maxlength="40" />
+                  <p class="hint">Type *, x, or × between length and width. The listing formats it as × mm.</p>
+                </div>
+                <div class="field">
+                  <label for="color">Color <span class="required">*</span></label>
+                  <input id="color" name="color" placeholder="e.g. Royal Blue" required maxlength="60" />
+                </div>
+                <div class="field">
+                  <label for="clarity">Clarity <span class="required">*</span></label>
+                  <input id="clarity" name="clarity" placeholder="e.g. Eye Clean" required maxlength="60" />
+                </div>
+                <div class="field">
+                  <label for="cut">Cut <span class="required">*</span></label>
+                  <input id="cut" name="cut" placeholder="e.g. Mixed Brilliant" required maxlength="70" />
+                </div>
+                <div class="field">
+                  <label for="treatment">Treatment <span class="required">*</span></label>
+                  <input id="treatment" name="treatment" placeholder="e.g. Heated / Unheated" required maxlength="70" />
+                </div>
+                <div class="field full">
+                  <label for="certification">Certification <span class="required">*</span></label>
+                  <input id="certification" name="certification" placeholder="e.g. GIA / Not Certified" required maxlength="90" />
+                </div>
+                <div class="field full">
+                  <label for="sku">SKU / Product code <span class="required">*</span></label>
+                  <input id="sku" name="sku" placeholder="e.g. BCG-SAP-001" required maxlength="50" />
+                </div>
+              </div>
+              <p class="form-footnote">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7.5" stroke="currentColor"/><path d="M10 9v4m0-6h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                All fields are required to create a complete listing. Enter only verified gemstone information.
+              </p>
+            </form>
+          </div>
+        </section>
+
+        <section class="panel preview-panel" aria-labelledby="previewTitle">
+          <div class="panel-head preview-head">
+            <div class="panel-heading">
+              <span class="step">02</span>
+              <div>
+                <h2 id="previewTitle">Your description</h2>
+                <p class="panel-subtitle">Your finished product listing, ready to use.</p>
+              </div>
+            </div>
+            <span class="live-indicator"><span class="live-dot"></span> Live preview</span>
+          </div>
+          <div class="preview-body">
+            <div class="document-label"><span>BigC Gems · Product listing</span><span id="previewState">Awaiting details</span></div>
+            <div class="output-wrap" aria-live="polite" aria-label="Generated product description">
+              <div class="empty-state" id="emptyState">
+                <div class="empty-gem" aria-hidden="true">
+                  <svg viewBox="0 0 32 32" fill="none"><path d="M8 5.5h16l5 8.1L16 28 3 13.6l5-8.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="m3.5 13.5 25-.1M8 5.8l4 7.5L16 28l4-14.7 4-7.5M12 13.3l4-7.5 4 7.5" stroke="currentColor" stroke-width="1.1"/></svg>
+                </div>
+                <strong>Your listing starts here</strong>
+                <span>Fill in the gemstone details or load an example to see your description come to life.</span>
+              </div>
+              <pre id="descriptionOutput" hidden></pre>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="button" class="action-button primary" id="copyButton" disabled>
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="6" width="9" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M13 6V4.5A1.5 1.5 0 0 0 11.5 3h-7A1.5 1.5 0 0 0 3 4.5v9A1.5 1.5 0 0 0 4.5 15H7" stroke="currentColor" stroke-width="1.5"/></svg>
+              Copy description
+            </button>
+            <button type="button" class="action-button secondary" id="shareButton" disabled>
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="15" cy="4" r="2.2" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="2.2" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="16" r="2.2" stroke="currentColor" stroke-width="1.5"/><path d="m7 9 5.9-3.8M7 11l5.9 3.8" stroke="currentColor" stroke-width="1.5"/></svg>
+              Share text
+            </button>
+          </div>
+          <div class="status" id="statusMessage" role="status" aria-live="polite"></div>
+        </section>
+      </section>
+    </main>
+    <footer class="bottom-note">Made for the details that make every stone <span>✦</span> BigC Gems</footer>
+  </div>
+
+  <script>
+    (() => {
+      const form = document.getElementById('gemstoneForm');
+      const output = document.getElementById('descriptionOutput');
+      const emptyState = document.getElementById('emptyState');
+      const copyButton = document.getElementById('copyButton');
+      const shareButton = document.getElementById('shareButton');
+      const statusMessage = document.getElementById('statusMessage');
+      const previewState = document.getElementById('previewState');
+      const exampleButton = document.getElementById('exampleButton');
+      let generatedText = '';
+      let isExample = false;
+
+      const fieldIds = [
+        'gemstone', 'origin', 'carat', 'shape', 'dimensions', 'color',
+        'clarity', 'cut', 'treatment', 'certification', 'sku'
+      ];
+
+      function getValues() {
+        return Object.fromEntries(fieldIds.map(id => [id, document.getElementById(id).value.trim()]));
+      }
+
+      function isComplete(values) {
+        return fieldIds.every(id => values[id] !== '') && Number(values.carat) > 0;
+      }
+
+      function formatDimensions(value) {
+        // Accept common separators and display dimensions consistently in the listing.
+        return value.trim().replace(/\s*(?:\*|×|[xX])\s*/g, ' × ');
+      }
+
+      function buildDescription(v) {
+        const dimensions = formatDimensions(v.dimensions);
+        return `Natural ${v.gemstone} – ${v.color} – ${v.carat} ct
+
+Product Description
+
+Discover the natural beauty of this ${v.gemstone}, featuring an attractive ${v.color} color and elegant ${v.shape} cut. With its unique appearance and beautiful sparkle, this gemstone is an excellent choice for custom jewelry, jewelry designers, and gemstone collectors.
+
+This gemstone is available from BigC Gems for your jewelry projects or personal collection.
+
+Gemstone Details
+
+* Gemstone: ${v.gemstone}
+* Origin: ${v.origin}
+* Carat Weight: ${v.carat} ct
+* Shape: ${v.shape}
+* Dimensions: ${dimensions} mm
+* Color: ${v.color}
+* Clarity: ${v.clarity}
+* Cut: ${v.cut}
+* Treatment: ${v.treatment}
+* Certification: ${v.certification}
+* SKU: ${v.sku}
+
+Perfect For
+
+This gemstone may be suitable for rings, pendants, earrings, custom jewelry designs, or gemstone collections, depending on its characteristics.
+
+Treatment & Care
+
+Treatment information is provided according to the details available for the individual gemstone. Handle your gemstone carefully and consult a jeweler for appropriate cleaning and setting recommendations.
+
+About BigC Gems
+
+BigC Gems specializes in natural gemstones sourced from Sri Lanka and Madagascar. We aim to provide accurate gemstone information and photographs to help customers choose the right stone for their needs.
+
+Please Note: Gemstone colors may appear slightly different under various lighting conditions and on different screens. Please review the product photographs and specifications before purchasing.`;
+      }
+
+      function setStatus(message, isError = false) {
+        statusMessage.textContent = message;
+        statusMessage.classList.toggle('error', isError);
+      }
+
+      function updatePreview() {
+        const values = getValues();
+        const complete = isComplete(values);
+        generatedText = complete ? buildDescription(values) : '';
+        output.hidden = !complete;
+        emptyState.hidden = complete;
+        copyButton.disabled = !complete;
+        shareButton.disabled = !complete;
+        previewState.textContent = complete ? (isExample ? 'Example data' : 'Ready to share') : 'Awaiting details';
+        if (complete) output.textContent = generatedText;
+        setStatus('');
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+        const temporary = document.createElement('textarea');
+        temporary.value = text;
+        temporary.setAttribute('readonly', '');
+        temporary.style.position = 'fixed';
+        temporary.style.opacity = '0';
+        document.body.appendChild(temporary);
+        temporary.select();
+        const copied = document.execCommand('copy');
+        temporary.remove();
+        if (!copied) throw new Error('Clipboard access is unavailable in this browser.');
+      }
+
+      form.addEventListener('input', () => {
+        isExample = false;
+        updatePreview();
+      });
+      form.addEventListener('change', () => {
+        isExample = false;
+        updatePreview();
+      });
+
+      exampleButton.addEventListener('click', () => {
+        const example = {
+          gemstone: 'Blue Sapphire', origin: 'Sri Lanka', carat: '2.50', shape: 'Oval',
+          dimensions: '8.2 × 6.1', color: 'Royal Blue', clarity: 'Eye Clean',
+          cut: 'Mixed Brilliant', treatment: 'Heated', certification: 'Not Certified',
+          sku: 'BCG-DEMO-001'
+        };
+        for (const [id, value] of Object.entries(example)) document.getElementById(id).value = value;
+        isExample = true;
+        updatePreview();
+        setStatus('Example loaded. Replace these sample values with your gemstone details.');
+        document.getElementById('gemstone').focus({ preventScroll: true });
+      });
+
+      copyButton.addEventListener('click', async () => {
+        if (!form.reportValidity() || !generatedText) return;
+        try {
+          await copyText(generatedText);
+          setStatus('Complete description copied to your clipboard.');
+        } catch (error) {
+          setStatus(error.message || 'Could not copy the description. Please select and copy the text.', true);
+        }
+      });
+
+      shareButton.addEventListener('click', async () => {
+        if (!form.reportValidity() || !generatedText) return;
+        try {
+          if (navigator.share) {
+            await navigator.share({ title: 'BigC Gems Product Description', text: generatedText });
+            setStatus('Share sheet opened.');
+          } else {
+            await copyText(generatedText);
+            setStatus('Sharing is not supported here, so the complete description was copied instead.');
+          }
+        } catch (error) {
+          if (error.name === 'AbortError') return;
+          try {
+            await copyText(generatedText);
+            setStatus('Sharing was unavailable. The complete description was copied instead.');
+          } catch (copyError) {
+            setStatus('Could not share or copy in this browser. Please try another browser.', true);
+          }
+        }
+      });
+
+      updatePreview();
+    })();
+  </script>
+</body>
+</html>
